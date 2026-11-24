@@ -7,7 +7,7 @@ const TABS = [
   { to: "/summary", label: "Summary", icon: ChartLine },
 ];
 
-function getExtraTab(pathname) {
+function getExtraTab(pathname: string) {
   if (pathname === "/edit-budget") return "Edit Budget";
   if (pathname === "/add") return "Add Transaction";
   if (pathname.startsWith("/transaction/")) return "View Transaction";
