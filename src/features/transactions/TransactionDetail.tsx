@@ -1,23 +1,25 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Layout from "../components/Layout";
-import TextLink from "../components/TextLink";
-import Button from "../components/Button";
-import Modal from "../components/Modal";
-import Badge from "../components/Badge";
+import Layout from "../../components/Layout";
+import TextLink from "../../components/TextLink";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
+import Badge from "../../components/Badge";
 import {
   CATEGORY_BADGE_BACKGROUNDS,
   CATEGORY_COLORS,
-} from "../lib/categories";
-import TypeToggle from "../components/TypeToggle";
-import { FieldLabel, TextInput, SelectInput } from "../components/FormField";
-import { useTransactions } from "../context/TransactionsContext";
-import { useClickOutside } from "../hooks/useClickOutside";
-import { CATEGORIES } from "../lib/categories";
-import { formatCurrency, formatDisplayDate } from "../lib/format";
-import { useToast } from "../context/ToastContext";
-import { TYPES } from "../lib/typetoggle";
+} from "../../lib/categories";
+import TypeToggle from "../../components/TypeToggle";
+import { FieldLabel, TextInput, SelectInput } from "../../components/FormField";
+import { useTransactions } from "../../context/TransactionsContext";
+import { useClickOutside } from "../../hooks/useClickOutside";
+import { CATEGORIES } from "../../lib/categories";
+import { formatCurrency, formatDisplayDate } from "../../lib/format";
+import { useToast } from "../../context/ToastContext";
+import { TYPES } from "../../lib/typetoggle";
+import type { Category } from "../../types";
+import type { TransactionForm, TransactionFormErrors } from "./form";
 
 export default function TransactionDetail() {
   const { id } = useParams();
@@ -28,8 +30,8 @@ export default function TransactionDetail() {
   const transaction = getTransaction(id);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [form, setForm] = useState(null);
-  const [errors, setErrors] = useState({});
+  const [form, setForm] = useState<TransactionForm | null>(null);
+  const [errors, setErrors] = useState<TransactionFormErrors>({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const editFormRef = useRef(null);
@@ -56,7 +58,7 @@ export default function TransactionDetail() {
 
   if (!transaction) {
     return (
-      <Layout variant="modal" extraTab="View Transaction">
+      <Layout variant="modal">
         <p style={{ color: "var(--color-text-primary)" }}>
           This transaction doesn't exist or was already deleted.
         </p>
@@ -68,26 +70,30 @@ export default function TransactionDetail() {
     );
   }
 
-  function setField(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  function setField<K extends keyof TransactionForm>(
+    field: K,
+    value: TransactionForm[K],
+  ) {
+    setForm((prev) => (prev ? { ...prev, [field]: value } : prev));
   }
 
-  function validate() {
-    const nextErrors = {};
-    if (!form.name.trim()) nextErrors.name = "Name is required.";
-    if (!form.date) nextErrors.date = "Date is required.";
-    if (!form.category) nextErrors.category = "Category is required.";
-    const amountNumber = Number(form.amount);
-    if (!form.amount || Number.isNaN(amountNumber) || amountNumber <= 0) {
+  function validate(currentForm: TransactionForm) {
+    const nextErrors: TransactionFormErrors = {};
+    if (!currentForm.name.trim()) nextErrors.name = "Name is required.";
+    if (!currentForm.date) nextErrors.date = "Date is required.";
+    if (!currentForm.category) nextErrors.category = "Category is required.";
+    const amountNumber = Number(currentForm.amount);
+    if (!currentForm.amount || Number.isNaN(amountNumber) || amountNumber <= 0) {
       nextErrors.amount = "Enter an amount greater than 0.";
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSave(e) {
+  function handleSave(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!transaction || !form) return;
+    if (!validate(form) || form.category === "") return;
     updateTransaction(transaction.id, {
       name: form.name.trim(),
       date: form.date,
@@ -104,6 +110,7 @@ export default function TransactionDetail() {
   }
 
   function confirmDelete() {
+    if (!transaction) return;
     deleteTransaction(transaction.id);
     showToast("Transaction deleted successfully!");
     navigate("/");
@@ -128,7 +135,7 @@ export default function TransactionDetail() {
         confirmLabel="Delete"
         cancelLabel="Cancel"
       />
-      {isEditing ? (
+      {isEditing && form ? (
         <form onSubmit={handleSave} noValidate>
           <div className="flex items-center justify-between">
             <h1
@@ -181,7 +188,7 @@ export default function TransactionDetail() {
               <SelectInput
                 id="category"
                 value={form.category}
-                onChange={(v) => setField("category", v)}
+                onChange={(v) => setField("category", v as Category)}
                 options={CATEGORIES}
                 error={errors.category}
               />
