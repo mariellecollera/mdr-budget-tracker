@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import type { Transaction, TransactionInput } from "../types";
 
 const STORAGE_KEY = "lumon-transactions";
-const BUDGET_STORAGE_KEY = "lumon-budget";
 
 function readFromStorage(): Transaction[] {
   try {
@@ -18,25 +17,6 @@ function readFromStorage(): Transaction[] {
 function writeToStorage(transactions: Transaction[]) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
-  } catch {
-    // storage can fail (quota, private mode) -- fail silently, in-memory
-    // state still keeps the app usable for the current session.
-  }
-}
-
-function readBudgetFromStorage(): number {
-  try {
-    const raw = window.localStorage.getItem(BUDGET_STORAGE_KEY);
-    const parsed = Number(raw);
-    return Number.isNaN(parsed) ? 0 : parsed;
-  } catch {
-    return 0;
-  }
-}
-
-function writeBudgetToStorage(budget: number) {
-  try {
-    window.localStorage.setItem(BUDGET_STORAGE_KEY, String(budget));
   } catch {
     // storage can fail (quota, private mode) -- fail silently, in-memory
     // state still keeps the app usable for the current session.
@@ -60,16 +40,11 @@ function writeBudgetToStorage(budget: number) {
 export function useTransactions() {
   const [transactions, setTransactions] =
     useState<Transaction[]>(readFromStorage);
-  const [budget, setBudget] = useState<number>(readBudgetFromStorage);
 
   // Keep localStorage in sync whenever the list changes.
   useEffect(() => {
     writeToStorage(transactions);
   }, [transactions]);
-
-  useEffect(() => {
-    writeBudgetToStorage(budget);
-  }, [budget]);
 
   const addTransaction = useCallback((data: TransactionInput) => {
     const newTransaction: Transaction = { id: crypto.randomUUID(), ...data };
@@ -98,8 +73,6 @@ export function useTransactions() {
     updateTransaction,
     deleteTransaction,
     getTransaction,
-    budget,
-    setBudget,
   };
 }
 
