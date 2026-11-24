@@ -1,4 +1,12 @@
-export default function Widget({ title, children }) {
+import type { ReactNode } from "react";
+
+export default function Widget({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
   return (
     <div
       className="rounded-2xl px-5 py-5 sm:px-8 sm:py-7"
