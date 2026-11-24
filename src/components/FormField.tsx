@@ -6,7 +6,7 @@ export function FieldLabel({
   htmlFor,
 }: {
   children: ReactNode;
-  htmlFor: string;
+  htmlFor?: string;
 }) {
   return (
     <label
