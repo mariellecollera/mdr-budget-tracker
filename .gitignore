@@ -25,4 +25,5 @@ dist-ssr
 *.sw?
 
 # Personal notes
-to-do
+docs/blueprint.html
+docs/build-list.html
