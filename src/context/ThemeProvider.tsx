@@ -1,9 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ThemeContext } from "./ThemeContext";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import { ThemeContext, type Theme } from "./ThemeContext";
 
 const STORAGE_KEY = "lumon-theme";
 
-function getInitialTheme() {
+function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
@@ -13,7 +19,7 @@ function getInitialTheme() {
   return prefersDark ? "dark" : "light";
 }
 
-export function ThemeProvider({ children }) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState(getInitialTheme);
 
   const toggleTheme = useCallback(() => {
