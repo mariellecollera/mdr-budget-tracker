@@ -1,4 +1,14 @@
-export default function ToastViewport({ toasts, onDismiss }) {
+import type { Toast } from "../context/ToastContext";
+
+interface ToastViewportProps {
+  toasts: Toast[];
+  onDismiss: (id: string) => void;
+}
+
+export default function ToastViewport({
+  toasts,
+  onDismiss,
+}: ToastViewportProps) {
   if (toasts.length === 0) return null;
 
   return (
