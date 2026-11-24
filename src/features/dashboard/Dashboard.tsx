@@ -1,16 +1,16 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import Layout from "../components/Layout";
-import Widget from "../components/Widget";
-import TextLink from "../components/TextLink";
-import { currencyColor, formatCurrency } from "../lib/format";
-import SearchBar from "../components/SearchBar";
-import Dropdown from "../components/Dropdown";
-import Button from "../components/Button";
-import { ArrowRight, Pencil } from "lucide-react";
-import TransactionCard from "../components/TransactionCard";
-import { useTransactions } from "../context/TransactionsContext";
-import { CATEGORIES } from "../lib/categories";
+import Layout from "../../components/Layout";
+import Widget from "../../components/Widget";
+import TextLink from "../../components/TextLink";
+import { currencyColor, formatCurrency } from "../../lib/format";
+import SearchBar from "../../components/SearchBar";
+import Dropdown from "../../components/Dropdown";
+import Button from "../../components/Button";
+import { ArrowRight } from "lucide-react";
+import TransactionCard from "../../components/TransactionCard";
+import { useTransactions } from "../../context/TransactionsContext";
+import { CATEGORIES } from "../../lib/categories";
 
 const TYPE_OPTIONS = [
   { value: "All", label: "All Types" },
@@ -24,7 +24,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 export default function Dashboard() {
-  const { transactions, budget } = useTransactions();
+  const { transactions } = useTransactions();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -42,7 +42,6 @@ export default function Dashboard() {
   }, [transactions]);
 
   const balance = totalIncome - totalExpenses;
-  const remBudget = budget - totalExpenses;
 
   // Filtering is recomputed only when its real inputs change (useMemo),
   // and the resulting cards are memoized individually (TransactionCard),
@@ -60,7 +59,7 @@ export default function Dashboard() {
 
   return (
     <Layout variant="panel">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 sm:items-stretch">
+      <div className="grid grid-cols-1 gap-4">
         <Widget title="Current Balance">
           <div className="flex flex-wrap text-2xl items-center justify-between gap-2">
             <div
@@ -77,35 +76,6 @@ export default function Dashboard() {
               View Summary
               <ArrowRight size={16} aria-hidden="true" />
             </TextLink>
-          </div>
-        </Widget>
-
-        <Widget title="Remaining Budget">
-          <div className="flex flex-wrap text-2xl items-center justify-between gap-2">
-            <div>
-              <div
-                className="flex flex-wrap items-center font-bold gap-3"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  color: currencyColor(remBudget),
-                }}
-              >
-                {formatCurrency(remBudget)}
-              </div>
-              <div className="text-sm mt-1">
-                out of{" "}
-                <span className="text-xs font-display">
-                  {formatCurrency(budget)}
-                </span>
-              </div>
-            </div>
-
-            <Link to="/edit-budget">
-              <Button variant="primary">
-                <Pencil size={16} aria-hidden="true" />
-                Edit Budget
-              </Button>
-            </Link>
           </div>
         </Widget>
       </div>
