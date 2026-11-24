@@ -1,18 +1,20 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
-import Button from "../components/Button";
-import Modal from "../components/Modal";
-import TypeToggle from "../components/TypeToggle";
-import { FieldLabel, TextInput, SelectInput } from "../components/FormField";
-import { useTransactions } from "../context/TransactionsContext";
-import { useClickOutside } from "../hooks/useClickOutside";
-import { CATEGORIES } from "../lib/categories";
-import { todayISO } from "../lib/format";
-import { useToast } from "../context/ToastContext";
-import { TYPES } from "../lib/typetoggle";
+import Layout from "../../components/Layout";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
+import TypeToggle from "../../components/TypeToggle";
+import { FieldLabel, TextInput, SelectInput } from "../../components/FormField";
+import { useTransactions } from "../../context/TransactionsContext";
+import { useClickOutside } from "../../hooks/useClickOutside";
+import { CATEGORIES } from "../../lib/categories";
+import { todayISO } from "../../lib/format";
+import { useToast } from "../../context/ToastContext";
+import { TYPES } from "../../lib/typetoggle";
+import type { Category } from "../../types";
+import type { TransactionForm, TransactionFormErrors } from "./form";
 
-const EMPTY_FORM = {
+const EMPTY_FORM: TransactionForm = {
   name: "",
   date: todayISO(),
   type: "Expense",
@@ -24,17 +26,20 @@ export default function AddTransaction() {
   const { addTransaction } = useTransactions();
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [errors, setErrors] = useState({});
+  const [form, setForm] = useState<TransactionForm>(EMPTY_FORM);
+  const [errors, setErrors] = useState<TransactionFormErrors>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cardRef = useRef(null);
 
-  function setField(field, value) {
+  function setField<K extends keyof TransactionForm>(
+    field: K,
+    value: TransactionForm[K],
+  ) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
   function validate() {
-    const nextErrors = {};
+    const nextErrors: TransactionFormErrors = {};
     if (!form.name.trim()) nextErrors.name = "Name is required.";
     if (!form.date) nextErrors.date = "Date is required.";
     if (!form.category) nextErrors.category = "Category is required.";
@@ -46,9 +51,9 @@ export default function AddTransaction() {
     return Object.keys(nextErrors).length === 0;
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate() || form.category === "") return;
 
     addTransaction({
       name: form.name.trim(),
@@ -130,7 +135,7 @@ export default function AddTransaction() {
             <SelectInput
               id="category"
               value={form.category}
-              onChange={(v) => setField("category", v)}
+              onChange={(v) => setField("category", v as Category)}
               options={CATEGORIES}
               placeholder="Select a category"
               error={errors.category}
