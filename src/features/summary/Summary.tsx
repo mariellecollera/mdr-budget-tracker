@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Pie, PieChart, ResponsiveContainer, Sector, Tooltip } from "recharts";
-import Layout from "../components/Layout";
-import Widget from "../components/Widget";
-import ThemeToggle from "../components/ThemeToggle";
-import TypeToggle from "../components/TypeToggle";
-import StatBox from "../components/StatBox";
-import { useTransactions } from "../context/TransactionsContext";
+import Layout from "../../components/Layout";
+import Widget from "../../components/Widget";
+import ThemeToggle from "../../components/ThemeToggle";
+import TypeToggle from "../../components/TypeToggle";
+import StatBox from "../../components/StatBox";
+import { useTransactions } from "../../context/TransactionsContext";
 import {
   currencyColor,
   formatCurrency,
@@ -18,13 +18,14 @@ import {
   endOfMonth,
   shiftDate,
   isWithinRange,
-} from "../lib/format";
-import { FILTERS } from "../lib/typetoggle";
-import { CATEGORY_COLORS } from "../lib/categories";
+} from "../../lib/format";
+import { FILTERS, type SummaryFilter } from "../../lib/typetoggle";
+import { CATEGORY_COLORS } from "../../lib/categories";
+import type { Category } from "../../types";
 
 export default function Summary() {
-  const { transactions, budget } = useTransactions();
-  const [filter, setFilter] = useState("Daily");
+  const { transactions } = useTransactions();
+  const [filter, setFilter] = useState<SummaryFilter>("Daily");
   const [currentDate, setCurrentDate] = useState(todayISO());
 
   const range = useMemo(() => {
@@ -44,7 +45,7 @@ export default function Summary() {
 
   const { totalExpenses, totalIncome, totalTransactions, byCategory } =
     useMemo(() => {
-      const totals = {};
+      const totals: Partial<Record<Category, number>> = {};
       let total = 0;
       let income = 0;
       for (const transaction of periodTransactions) {
@@ -58,7 +59,7 @@ export default function Summary() {
         totals[transaction.category] =
           (totals[transaction.category] || 0) + amt;
       }
-      const rows = Object.entries(totals)
+      const rows = (Object.entries(totals) as [Category, number][])
         .map(([category, amount]) => ({
           category,
           amount,
@@ -75,9 +76,6 @@ export default function Summary() {
     }, [periodTransactions]);
 
   const netFlow = totalIncome - totalExpenses;
-  const budgetPercent =
-    budget > 0 ? Math.min(100, Math.round((totalExpenses / budget) * 100)) : 0;
-  const isOverBudget = budget > 0 && totalExpenses > budget;
 
   const label = useMemo(() => {
     if (filter === "Daily") return formatDisplayDate(currentDate);
@@ -90,7 +88,7 @@ export default function Summary() {
     });
   }, [filter, currentDate, range]);
 
-  function handleFilterChange(nextFilter) {
+  function handleFilterChange(nextFilter: SummaryFilter) {
     setFilter(nextFilter);
     setCurrentDate(todayISO());
   }
@@ -147,40 +145,8 @@ export default function Summary() {
       </div>
 
       <div className="mt-6">
-        <Widget title="Budget Summary">
-          <div className="mt-6">
-            <div
-              className="flex items-center justify-between"
-              style={{ color: "var(--color-text-primary)" }}
-            >
-              <span>Budget Used</span>
-              <span className="text-sm font-display font-semibold ">
-                {formatCurrency(totalExpenses)} / {formatCurrency(budget)}
-              </span>
-            </div>
-            <div
-              className="mt-2 h-4 w-full overflow-hidden"
-              style={{ backgroundColor: "var(--color-bg-input)" }}
-            >
-              <div
-                className="h-full transition-all duration-300 ease-in-out"
-                style={{
-                  width: `${budgetPercent}%`,
-                  backgroundColor: isOverBudget
-                    ? "var(--color-expense-text)"
-                    : "var(--color-btn-primary-bg)",
-                }}
-              />
-            </div>
-            <p
-              className="mt-1 italic text-xs"
-              style={{ color: "var(--color-text-secondary)" }}
-            >
-              {budgetPercent}% of budget used
-            </p>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-3  md:grid-cols-4">
+        <Widget title="Overview">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <StatBox
               label="Total Expenses"
               value={formatCurrency(totalExpenses)}
@@ -191,7 +157,10 @@ export default function Summary() {
               value={formatCurrency(totalIncome)}
               valueColor="var(--color-display)"
             />
-            <StatBox label="Total Transactions" value={totalTransactions} />
+            <StatBox
+              label="Total Transactions"
+              value={String(totalTransactions)}
+            />
             <StatBox
               label="Net Flow"
               value={formatCurrency(netFlow)}
@@ -243,7 +212,7 @@ export default function Summary() {
                     >
                       <Tooltip
                         formatter={(value, name) => [
-                          formatCurrency(value),
+                          formatCurrency(Number(value)),
                           name,
                         ]}
                         wrapperStyle={{ zIndex: 50 }}
