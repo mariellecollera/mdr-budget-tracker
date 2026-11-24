@@ -1,5 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
-import { ToastContext } from "./ToastContext";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
+import {
+  ToastContext,
+  type Toast,
+  type ToastContextValue,
+} from "./ToastContext";
 import ToastViewport from "../components/ToastViewport";
 
 const DEFAULT_DURATION = 3000;
@@ -13,10 +17,10 @@ const DEFAULT_DURATION = 3000;
  * to "/") still shows up on the page you land on, instead of getting wiped
  * out when the triggering page unmounts.
  */
-export function ToastProvider({ children }) {
-  const [toasts, setToasts] = useState([]);
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const dismissToast = useCallback((id) => {
+  const dismissToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
@@ -24,7 +28,7 @@ export function ToastProvider({ children }) {
   // from render/props, so scheduling the timer here directly is fine — no
   // useEffect needed. (Effects are for syncing with state that changes on
   // its own between renders; this is a one-off imperative action.)
-  const showToast = useCallback(
+  const showToast = useCallback<ToastContextValue["showToast"]>(
     (message, { type = "default", duration = DEFAULT_DURATION } = {}) => {
       const id = crypto.randomUUID();
       setToasts((prev) => [...prev, { id, message, type }]);
