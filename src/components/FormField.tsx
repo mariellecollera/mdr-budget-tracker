@@ -1,7 +1,13 @@
-import { useRef } from "react";
+import { useRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
 
-export function FieldLabel({ children, htmlFor }) {
+export function FieldLabel({
+  children,
+  htmlFor,
+}: {
+  children: ReactNode;
+  htmlFor: string;
+}) {
   return (
     <label
       htmlFor={htmlFor}
@@ -13,6 +19,13 @@ export function FieldLabel({ children, htmlFor }) {
   );
 }
 
+interface TextInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
+  value: string;
+  onChange?: (value: string) => void;
+  error?: string;
+}
+
 export function TextInput({
   id,
   value,
@@ -22,8 +35,8 @@ export function TextInput({
   readOnly,
   error,
   ...rest
-}) {
-  const inputRef = useRef(null);
+}: TextInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
   const isDate = type === "date";
   const isCurrency = type === "number";
 
@@ -82,6 +95,15 @@ export function TextInput({
   );
 }
 
+interface SelectInputProps {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder?: string;
+  error?: string;
+}
+
 export function SelectInput({
   id,
   value,
@@ -89,7 +111,7 @@ export function SelectInput({
   options,
   placeholder,
   error,
-}) {
+}: SelectInputProps) {
   return (
     <div>
       <div className="relative">
