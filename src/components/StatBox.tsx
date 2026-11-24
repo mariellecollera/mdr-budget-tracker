@@ -1,4 +1,10 @@
-export default function StatBox({ label, value, valueColor }) {
+interface StatBoxProps {
+  label: string;
+  value: string;
+  valueColor?: string;
+}
+
+export default function StatBox({ label, value, valueColor }: StatBoxProps) {
   return (
     <div className="w-full">
       <div
