@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 
 /**
  * Tracks whether the user clicks outside of a referenced element
@@ -6,17 +6,20 @@ import { useEffect } from "react";
  * Used by Add Transaction / Transaction Detail to surface a confirmation
  * modal before the user accidentally abandons an unsaved form.
  *
- * @param {React.RefObject} ref - ref attached to the element to watch.
- * @param {() => void} onOutsideClick - called when a click lands outside.
- * @param {boolean} enabled - pass false to pause tracking (e.g. while a
- *   confirmation modal is already open) without unmounting the hook.
+ * `ref` is attached to the element to watch, `onOutsideClick` is called when
+ * a click lands outside, and `enabled` can be set to false to pause tracking
+ * (e.g. while a confirmation modal is already open) without unmounting.
  */
-export function useClickOutside(ref, onOutsideClick, enabled = true) {
+export function useClickOutside(
+  ref: RefObject<HTMLElement | null>,
+  onOutsideClick: () => void,
+  enabled = true,
+) {
   useEffect(() => {
     if (!enabled) return;
 
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         onOutsideClick();
       }
     }
