@@ -1,4 +1,16 @@
-export default function TypeToggle({ label, choices, value, onChange }) {
+interface TypeToggleProps<T extends string> {
+  label?: string;
+  choices: readonly T[];
+  value: T;
+  onChange: (value: T) => void;
+}
+
+export default function TypeToggle<T extends string>({
+  label,
+  choices,
+  value,
+  onChange,
+}: TypeToggleProps<T>) {
   const activeIndex = Math.max(choices.indexOf(value), 0);
   const labelId = label ? "type-toggle-label" : undefined;
 
