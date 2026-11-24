@@ -18,9 +18,9 @@ import {
   endOfMonth,
   shiftDate,
   isWithinRange,
-} from "../utils/format";
-import { FILTERS } from "../data/typetoggle";
-import { CATEGORY_COLORS } from "../data/categories";
+} from "../lib/format";
+import { FILTERS } from "../lib/typetoggle";
+import { CATEGORY_COLORS } from "../lib/categories";
 
 export default function Summary() {
   const { transactions, budget } = useTransactions();

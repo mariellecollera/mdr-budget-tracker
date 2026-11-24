@@ -1,10 +1,12 @@
-export function currencyColor(balance) {
+import type { SummaryFilter } from "./typetoggle";
+
+export function currencyColor(balance: number): string {
   return balance < 0
     ? "var(--color-expense-text)"
     : "var(--color-text-primary)";
 }
 
-export function formatCurrency(amount) {
+export function formatCurrency(amount: number | string): string {
   const value = Number(amount) || 0;
   const sign = value < 0 ? "-" : "";
   const formatted = Math.abs(value).toLocaleString("en-PH", {
@@ -14,57 +16,61 @@ export function formatCurrency(amount) {
   return `${sign}₱${formatted}`;
 }
 
-export function formatNumericDate(isoDate) {
+export function formatNumericDate(isoDate?: string): string {
   if (!isoDate) return "";
   const [year, month, day] = isoDate.split("-");
   if (!year || !month || !day) return isoDate;
   return `${month}/${day}/${year}`;
 }
 
-export function todayISO() {
+export function todayISO(): string {
   return localISO(new Date());
 }
 
 /* ---------- date range helpers for Summary filtering ---------- */
 
-function parseISO(iso) {
+function parseISO(iso: string): Date {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d);
 }
 
-function localISO(date) {
+function localISO(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
-export function startOfWeek(iso) {
+export function startOfWeek(iso: string): string {
   const d = parseISO(iso);
   const day = d.getDay(); // 0 = Sunday
   d.setDate(d.getDate() - day);
   return localISO(d);
 }
 
-export function endOfWeek(iso) {
+export function endOfWeek(iso: string): string {
   const d = parseISO(startOfWeek(iso));
   d.setDate(d.getDate() + 6);
   return localISO(d);
 }
 
-export function startOfMonth(iso) {
+export function startOfMonth(iso: string): string {
   const d = parseISO(iso);
   d.setDate(1);
   return localISO(d);
 }
 
-export function endOfMonth(iso) {
+export function endOfMonth(iso: string): string {
   const d = parseISO(iso);
   d.setMonth(d.getMonth() + 1, 0); // last day of current month
   return localISO(d);
 }
 
-export function shiftDate(iso, filter, direction) {
+export function shiftDate(
+  iso: string,
+  filter: SummaryFilter,
+  direction: number,
+): string {
   const d = parseISO(iso);
   if (filter === "Daily") d.setDate(d.getDate() + direction);
   else if (filter === "Weekly") d.setDate(d.getDate() + direction * 7);
@@ -72,11 +78,15 @@ export function shiftDate(iso, filter, direction) {
   return localISO(d);
 }
 
-export function isWithinRange(dateISO, startISO, endISO) {
+export function isWithinRange(
+  dateISO: string,
+  startISO: string,
+  endISO: string,
+): boolean {
   return dateISO >= startISO && dateISO <= endISO;
 }
 
-export function formatDisplayDate(iso) {
+export function formatDisplayDate(iso: string): string {
   const d = parseISO(iso);
   return d.toLocaleDateString("en-US", {
     year: "numeric",

@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 import Widget from "../components/Widget";
 import TextLink from "../components/TextLink";
-import { currencyColor, formatCurrency } from "../utils/format";
+import { currencyColor, formatCurrency } from "../lib/format";
 import SearchBar from "../components/SearchBar";
 import Dropdown from "../components/Dropdown";
 import Button from "../components/Button";
 import { ArrowRight, Pencil } from "lucide-react";
 import TransactionCard from "../components/TransactionCard";
 import { useTransactions } from "../context/TransactionsContext";
-import { CATEGORIES } from "../data/categories";
+import { CATEGORIES } from "../lib/categories";
 
 const TYPE_OPTIONS = [
   { value: "All", label: "All Types" },

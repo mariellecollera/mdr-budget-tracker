@@ -1,11 +1,11 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import Badge from "./Badge";
-import { formatCurrency, formatDisplayDate } from "../utils/format";
+import { formatCurrency, formatDisplayDate } from "../lib/format";
 import {
   CATEGORY_BADGE_BACKGROUNDS,
   CATEGORY_COLORS,
-} from "../data/categories";
+} from "../lib/categories";
 
 /**
  * Performance note: Dashboard re-renders on every keystroke in the search

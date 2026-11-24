@@ -7,10 +7,10 @@ import TypeToggle from "../components/TypeToggle";
 import { FieldLabel, TextInput, SelectInput } from "../components/FormField";
 import { useTransactions } from "../context/TransactionsContext";
 import { useClickOutside } from "../hooks/useClickOutside";
-import { CATEGORIES } from "../data/categories";
-import { todayISO } from "../utils/format";
+import { CATEGORIES } from "../lib/categories";
+import { todayISO } from "../lib/format";
 import { useToast } from "../context/ToastContext";
-import { TYPES } from "../data/typetoggle";
+import { TYPES } from "../lib/typetoggle";
 
 const EMPTY_FORM = {
   name: "",
