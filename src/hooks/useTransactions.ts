@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import type { Transaction, TransactionInput } from "../types";
 
 const STORAGE_KEY = "lumon-transactions";
 const BUDGET_STORAGE_KEY = "lumon-budget";
 
-function readFromStorage() {
+function readFromStorage(): Transaction[] {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
@@ -14,7 +15,7 @@ function readFromStorage() {
   }
 }
 
-function writeToStorage(transactions) {
+function writeToStorage(transactions: Transaction[]) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
   } catch {
@@ -23,7 +24,7 @@ function writeToStorage(transactions) {
   }
 }
 
-function readBudgetFromStorage() {
+function readBudgetFromStorage(): number {
   try {
     const raw = window.localStorage.getItem(BUDGET_STORAGE_KEY);
     const parsed = Number(raw);
@@ -33,7 +34,7 @@ function readBudgetFromStorage() {
   }
 }
 
-function writeBudgetToStorage(budget) {
+function writeBudgetToStorage(budget: number) {
   try {
     window.localStorage.setItem(BUDGET_STORAGE_KEY, String(budget));
   } catch {
@@ -57,8 +58,9 @@ function writeBudgetToStorage(budget) {
  *  - getTransaction(id)
  */
 export function useTransactions() {
-  const [transactions, setTransactions] = useState(readFromStorage);
-  const [budget, setBudget] = useState(readBudgetFromStorage);
+  const [transactions, setTransactions] =
+    useState<Transaction[]>(readFromStorage);
+  const [budget, setBudget] = useState<number>(readBudgetFromStorage);
 
   // Keep localStorage in sync whenever the list changes.
   useEffect(() => {
@@ -69,24 +71,24 @@ export function useTransactions() {
     writeBudgetToStorage(budget);
   }, [budget]);
 
-  const addTransaction = useCallback((data) => {
-    const newTransaction = { id: crypto.randomUUID(), ...data };
+  const addTransaction = useCallback((data: TransactionInput) => {
+    const newTransaction: Transaction = { id: crypto.randomUUID(), ...data };
     setTransactions((prev) => [newTransaction, ...prev]);
     return newTransaction;
   }, []);
 
-  const updateTransaction = useCallback((id, data) => {
+  const updateTransaction = useCallback((id: string, data: Partial<TransactionInput>) => {
     setTransactions((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...data, id } : t)),
     );
   }, []);
 
-  const deleteTransaction = useCallback((id) => {
+  const deleteTransaction = useCallback((id: string) => {
     setTransactions((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
   const getTransaction = useCallback(
-    (id) => transactions.find((t) => t.id === id),
+    (id: string | undefined) => transactions.find((t) => t.id === id),
     [transactions],
   );
 
@@ -100,3 +102,5 @@ export function useTransactions() {
     setBudget,
   };
 }
+
+export type TransactionsStore = ReturnType<typeof useTransactions>;
