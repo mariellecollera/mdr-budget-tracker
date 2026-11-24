@@ -1,6 +1,25 @@
 import { ChevronDown } from "lucide-react";
 
-export default function Dropdown({ id, value, onChange, options, ariaLabel }) {
+export interface DropdownOption {
+  value: string;
+  label: string;
+}
+
+interface DropdownProps {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: DropdownOption[];
+  ariaLabel: string;
+}
+
+export default function Dropdown({
+  id,
+  value,
+  onChange,
+  options,
+  ariaLabel,
+}: DropdownProps) {
   return (
     <div className="relative">
       <select
