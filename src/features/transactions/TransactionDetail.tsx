@@ -34,6 +34,9 @@ export default function TransactionDetail() {
   const [errors, setErrors] = useState<TransactionFormErrors>({});
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  // Set on delete so we render nothing (instead of the "not found" message)
+  // during the moment between the transaction vanishing and the redirect.
+  const [isDeleted, setIsDeleted] = useState(false);
   const editFormRef = useRef(null);
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export default function TransactionDetail() {
   );
 
   if (!transaction) {
+    if (isDeleted) return null;
     return (
       <Layout variant="modal">
         <p style={{ color: "var(--color-text-primary)" }}>
@@ -111,6 +115,7 @@ export default function TransactionDetail() {
 
   function confirmDelete() {
     if (!transaction) return;
+    setIsDeleted(true);
     deleteTransaction(transaction.id);
     showToast("Transaction deleted successfully!");
     navigate("/");
