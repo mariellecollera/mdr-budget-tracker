@@ -1,8 +1,16 @@
+import type { ReactNode, Ref } from "react";
+
+interface LayoutProps {
+  children: ReactNode;
+  variant?: "panel" | "modal";
+  clickOutsideRef?: Ref<HTMLDivElement>;
+}
+
 export default function Layout({
   children,
   variant = "panel",
   clickOutsideRef,
-}) {
+}: LayoutProps) {
   return (
     <div
       ref={clickOutsideRef}
