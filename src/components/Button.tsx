@@ -1,4 +1,12 @@
-const VARIANT_STYLES = {
+import type { ButtonHTMLAttributes, CSSProperties } from "react";
+
+type ButtonVariant = "primary" | "secondary" | "delete";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+}
+
+const VARIANT_STYLES: Record<ButtonVariant, CSSProperties> = {
   primary: {
     backgroundColor: "var(--color-btn-primary-bg)",
     color: "var(--color-btn-primary-text)",
@@ -24,8 +32,8 @@ export default function Button({
   className = "",
   style: styleOverride,
   ...rest
-}) {
-  const variantStyle = VARIANT_STYLES[variant] || {};
+}: ButtonProps) {
+  const variantStyle = variant ? VARIANT_STYLES[variant] : {};
 
   const base =
     "inline-flex items-center justify-center gap-1.5 rounded-full px-6 py-3 text-xs font-semibold font-display transition-opacity cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
