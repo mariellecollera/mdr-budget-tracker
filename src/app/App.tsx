@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Dashboard from "./pages/Dashboard";
-import AddTransaction from "./pages/AddTransaction";
-import TransactionDetail from "./pages/TransactionDetail";
-import Summary from "./pages/Summary";
-import EditBudget from "./pages/EditBudget";
+import Header from "../components/Header";
+import Dashboard from "../features/dashboard/Dashboard";
+import AddTransaction from "../features/transactions/AddTransaction";
+import TransactionDetail from "../features/transactions/TransactionDetail";
+import Summary from "../features/summary/Summary";
 
 export default function App() {
   return (
@@ -19,7 +18,6 @@ export default function App() {
           <Route path="/summary" element={<Summary />} />
           <Route path="/add" element={<AddTransaction />} />
           <Route path="/transaction/:id" element={<TransactionDetail />} />
-          <Route path="/edit-budget" element={<EditBudget />} />
         </Routes>
       </div>
     </div>
