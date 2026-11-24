@@ -1,6 +1,16 @@
 import { Search } from "lucide-react";
 
-export default function SearchBar({ id = "search", value, onChange }) {
+interface SearchBarProps {
+  id?: string;
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export default function SearchBar({
+  id = "search",
+  value,
+  onChange,
+}: SearchBarProps) {
   return (
     <div className="relative flex-1">
       <Search
