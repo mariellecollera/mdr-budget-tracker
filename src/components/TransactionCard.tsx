@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import Badge from "./Badge";
+import type { Transaction } from "../types";
 import { formatCurrency, formatDisplayDate } from "../lib/format";
 import {
   CATEGORY_BADGE_BACKGROUNDS,
@@ -15,7 +16,7 @@ import {
  * its own `transaction` prop actually changes (e.g. after an edit),
  * regardless of how many times the parent Dashboard re-renders.
  */
-function TransactionCard({ transaction }) {
+function TransactionCard({ transaction }: { transaction: Transaction }) {
   const isExpense = transaction.type === "Expense";
 
   return (
