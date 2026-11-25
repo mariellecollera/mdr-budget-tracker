@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { categoriesFor, CATEGORY_NAMES, isCategoryFor } from "./categories";
+import {
+  CATEGORY_BADGE_BACKGROUNDS,
+  CATEGORY_COLORS,
+  categoriesFor,
+  CATEGORY_NAMES,
+  isCategoryFor,
+} from "./categories";
 
 describe("categoriesFor", () => {
   it("lists only the expense categories for an expense", () => {
@@ -44,5 +50,14 @@ describe("isCategoryFor", () => {
 describe("CATEGORY_NAMES", () => {
   it("lists Other only once", () => {
     expect(CATEGORY_NAMES.filter((name) => name === "Other")).toHaveLength(1);
+  });
+});
+
+describe("category color tokens", () => {
+  it("points each category at its color family", () => {
+    expect(CATEGORY_COLORS["Loans and debt"]).toBe("var(--category-umber)");
+    expect(CATEGORY_BADGE_BACKGROUNDS["Loans and debt"]).toBe(
+      "var(--category-umber-bg)",
+    );
   });
 });
