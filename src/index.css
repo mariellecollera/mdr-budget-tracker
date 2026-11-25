@@ -9,23 +9,32 @@
   --font-display: "Michroma", "Arial Narrow", sans-serif;
   --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+  /* ---- Primitives ---- */
+  --color-cobalt-600: #1b5287;
+
   /* ---- Light theme (default) ---- */
   --color-bg-app: #eaf4f1;
   --color-bg-card: #ffffff;
   --color-bg-input: #eef6fb;
+  --color-bg-accent: #0e2247;
+  --color-bg-scrim: rgba(15, 42, 87, 0.5);
+  --color-bg-panel-hover: #1d3a6b;
+  --color-bg-chart-highlight: var(--category-navy-bg);
   --color-bg-hero-outline: #0f2a57;
   --color-transaction-card-bg: #f9fcff;
 
   --color-text-primary: #0f2a57;
   --color-text-secondary: #5b6b82;
-  --color-text-muted: #94a3b8;
+  --color-text-muted: #5f6e85;
   --color-text-on-accent: #ffffff;
+  --color-text-on-panel-muted: #c9d6ec;
 
   --color-border: #0f2a57;
+  --color-border-input: #0f2a57;
   --color-border-soft: #d7e3ee;
 
   --color-tab-inactive-bg: #8fadc9;
-  --color-tab-inactive-text: #ffffff;
+  --color-tab-inactive-text: #0e2247;
   --color-tab-active-bg: #0e2247;
   --color-tab-active-text: #ffffff;
 
@@ -34,28 +43,69 @@
   --color-btn-secondary-bg: transparent;
   --color-btn-secondary-text: #0f2a57;
   --color-btn-secondary-border: #0f2a57;
+  --color-btn-danger-bg: #c4392b;
+  --color-btn-danger-text: #ffffff;
 
   --color-expense-bg: #fbd9d4;
-  --color-expense-text: #c4392b;
+  --color-expense-text: #a82e22;
   --color-income-bg: #d9efdc;
-  --color-income-text: #2e8b4f;
+  --color-income-text: #1a7040;
 
-  --category-grocery-bg: #e4ede8;
-  --category-grocery-text: #2f4a3d;
-  --category-bills-bg: #e1d4d3;
-  --category-bills-text: #3e2423;
-  --category-allowance-bg: #d0e6fa;
-  --category-allowance-text: #3c5b79;
-  --category-food-bg: #f3e1e4;
-  --category-food-text: #5b2333;
-  --category-subscriptions-bg: #f7e8e7;
-  --category-subscriptions-text: #6b4f13;
-  --category-transport-bg: #fff3dd;
-  --category-transport-text: #bd9a5a;
-  --category-other-bg: #eef0f4;
-  --category-other-text: #33415c;
-  --category-shopping-bg: #f5e4d6;
-  --category-shopping-text: #aa532b;
+  /* ---- Chart series ---- */
+  --color-chart-1: #0f2a57;
+  --color-chart-2: #4e7a50;
+  --color-chart-3: #3f6d9e;
+  --color-chart-4: #163f38;
+  --color-chart-5: #7a6428;
+  --color-chart-6: #4f7d76;
+
+  /* ---- Payment methods (aliases of category families) ---- */
+  --payment-cash: var(--category-sage);
+  --payment-cash-bg: var(--category-sage-bg);
+  --payment-gcash: var(--category-steel-blue);
+  --payment-gcash-bg: var(--category-steel-blue-bg);
+  --payment-bdo: var(--category-navy);
+  --payment-bdo-bg: var(--category-navy-bg);
+  --payment-maribank: var(--category-olive);
+  --payment-maribank-bg: var(--category-olive-bg);
+
+  /* ---- Bill frequencies (aliases of category families) ---- */
+  --frequency-one-time: var(--category-grey);
+  --frequency-one-time-bg: var(--category-grey-bg);
+  --frequency-weekly: var(--category-teal-grey);
+  --frequency-weekly-bg: var(--category-teal-grey-bg);
+  --frequency-monthly: var(--category-ink);
+  --frequency-monthly-bg: var(--category-ink-bg);
+  --frequency-yearly: var(--category-umber);
+  --frequency-yearly-bg: var(--category-umber-bg);
+
+  /* ---- Category color families ---- */
+  --category-navy: #0f2a57;
+  --category-navy-bg: #e3eaf5;
+  --category-steel-blue: #3f6d9e;
+  --category-steel-blue-bg: #e3edf6;
+  --category-olive: #7a6428;
+  --category-olive-bg: #f3eedd;
+  --category-sage: #44704a;
+  --category-sage-bg: #e9f1e9;
+  --category-teal-grey: #44716b;
+  --category-teal-grey-bg: #e7f0ee;
+  --category-forest: #163f38;
+  --category-forest-bg: #dde9e6;
+  --category-slate: #4f6588;
+  --category-slate-bg: #ebeef4;
+  --category-umber: #514827;
+  --category-umber-bg: #ece8dc;
+  --category-deep-teal: #1f6166;
+  --category-deep-teal-bg: #ddeeee;
+  --category-ink: #2a3562;
+  --category-ink-bg: #e4e6f1;
+  --category-mint: #286e60;
+  --category-mint-bg: #e2f2ec;
+  --category-moss: #556f2e;
+  --category-moss-bg: #e9f0dc;
+  --category-grey: #5b6b82;
+  --category-grey-bg: #eceef2;
 
   --color-modal-bg: #eaf4f1;
 
@@ -70,54 +120,77 @@
   --color-bg-app: #0a0e27;
   --color-bg-card: #0d1545;
   --color-bg-input: #1b2348;
+  --color-bg-accent: #143064;
+  --color-bg-scrim: rgba(3, 5, 18, 0.7);
+  --color-bg-panel-hover: #2462a0;
   --color-bg-hero-outline: #c9d6ec;
   --color-transaction-card-bg: #12193a;
 
   --color-text-primary: #eef2fb;
   --color-text-secondary: #9aa6c9;
-  --color-text-muted: #6b76a0;
+  --color-text-muted: #8790b8;
   --color-text-on-accent: #ffffff;
 
-  --color-border: #3c4a7a;
+  --color-border: #6b78a8;
+  --color-border-input: #8fadc9;
   --color-border-soft: #2a3562;
 
   --color-tab-inactive-bg: #8fadc9;
   --color-tab-inactive-text: #2a3562;
-  --color-tab-active-bg: #143064;
+  --color-tab-active-bg: var(--color-cobalt-600);
   --color-tab-active-text: #ffffff;
 
-  --color-btn-primary-bg: #143064;
-  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #c9d6ec;
+  --color-btn-primary-text: #0e2247;
   --color-btn-secondary-bg: transparent;
   --color-btn-secondary-text: #c9d6ec;
   --color-btn-secondary-border: #8fadc9;
+  --color-btn-danger-bg: #a8453a;
 
   --color-expense-bg: #422a37;
-  --color-expense-text: #b87268;
+  --color-expense-text: #d4867b;
   --color-income-bg: #1f3f2f;
   --color-income-text: #65b17f;
 
-  --category-grocery-bg: #1b2820;
-  --category-grocery-text: #9fc2ae;
-  --category-bills-bg: #2d1e20;
-  --category-bills-text: #e2b4b2;
-  --category-allowance-bg: #17283c;
-  --category-allowance-text: #82b3e8;
-  --category-food-bg: #351b22;
-  --category-food-text: #e8a2af;
-  --category-subscriptions-bg: #312316;
-  --category-subscriptions-text: #e8be78;
-  --category-transport-bg: #332a18;
-  --category-transport-text: #e2c478;
-  --category-other-bg: #212631;
-  --category-other-text: #9fa8b8;
-  --category-shopping-bg: #332018;
-  --category-shopping-text: #e89578;
+  /* ---- Chart series ---- */
+  --color-chart-1: #c9d6ec;
+  --color-chart-2: #7da17e;
+  --color-chart-3: #8aaecb;
+  --color-chart-4: #5f9e8c;
+  --color-chart-5: #b59a52;
+  --color-chart-6: #98b6b0;
+
+  /* ---- Category color families ---- */
+  --category-navy: #c9d6ec;
+  --category-navy-bg: #1b2a52;
+  --category-steel-blue: #8aaecb;
+  --category-steel-blue-bg: #1c2f4a;
+  --category-olive: #c8ae62;
+  --category-olive-bg: #3a3320;
+  --category-sage: #9cc39d;
+  --category-sage-bg: #22392a;
+  --category-teal-grey: #98b6b0;
+  --category-teal-grey-bg: #213a37;
+  --category-forest: #6fb3a0;
+  --category-forest-bg: #173a34;
+  --category-slate: #a3b4cf;
+  --category-slate-bg: #262f47;
+  --category-umber: #c2b07a;
+  --category-umber-bg: #353020;
+  --category-deep-teal: #7fbfbd;
+  --category-deep-teal-bg: #173c3e;
+  --category-ink: #b6c3e0;
+  --category-ink-bg: #232b4f;
+  --category-mint: #8fd0c0;
+  --category-mint-bg: #1b3d36;
+  --category-moss: #a9c48a;
+  --category-moss-bg: #2a3a1c;
+  --category-grey: #9aa6c9;
+  --category-grey-bg: #262d4a;
 
   --color-modal-bg: #0a0e27;
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-tab: inset 0 -4px 6px -4px rgba(0, 0, 0, 0.3);
 }
 
 * {

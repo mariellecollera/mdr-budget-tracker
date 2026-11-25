@@ -161,7 +161,7 @@ export default function TransactionDetail() {
                 className="mr-3 inline-block w-1 align-middle"
                 style={{
                   height: "1.1em",
-                  backgroundColor: "var(--color-btn-primary-bg)",
+                  backgroundColor: "var(--color-bg-accent)",
                 }}
               />
               Edit Transaction
@@ -271,7 +271,7 @@ export default function TransactionDetail() {
                 className="mr-3 inline-block w-1 align-middle"
                 style={{
                   height: "1.1em",
-                  backgroundColor: "var(--color-btn-primary-bg)",
+                  backgroundColor: "var(--color-bg-accent)",
                 }}
               />
               {transaction.name}
