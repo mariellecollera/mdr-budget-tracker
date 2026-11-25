@@ -1,8 +1,14 @@
-import type { Category } from "./category";
+import type { Category, ColorFamily } from "./category";
 
 export type TxnType = "Income" | "Expense";
 
 export type PaymentMethod = "cash" | "gcash" | "bdo" | "maribank";
+
+export interface PaymentMethodDefinition {
+  value: PaymentMethod;
+  label: string;
+  color: ColorFamily;
+}
 
 export interface Transaction {
   id: string;
@@ -12,6 +18,7 @@ export interface Transaction {
   type: TxnType;
   category: Category;
   amount: number;
+  paymentMethod: PaymentMethod;
 }
 
 /** What the form submits; the hook assigns the id. */

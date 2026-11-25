@@ -5,7 +5,11 @@ import { TransactionsProvider } from "../../context/TransactionsProvider";
 import type { Transaction } from "../../types";
 import Summary from "./Summary";
 
-const expense = { category: "Food", type: "Expense" } as const;
+const expense = {
+  category: "Food",
+  type: "Expense",
+  paymentMethod: "cash",
+} as const;
 
 const transactions: Transaction[] = [
   { ...expense, id: "1", name: "Today", date: "2026-11-25", amount: 100 },
@@ -16,6 +20,7 @@ const transactions: Transaction[] = [
     date: "2026-11-25",
     type: "Income",
     category: "Allowance",
+    paymentMethod: "cash",
     amount: 500,
   },
   { ...expense, id: "4", name: "Earlier", date: "2026-10-31", amount: 999 },

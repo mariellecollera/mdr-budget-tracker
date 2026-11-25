@@ -1,34 +1,69 @@
-import type { Category } from "../types";
+import type { Category, CategoryDefinition, TxnType } from "../types";
 
-export const CATEGORIES: Category[] = [
-  "Food",
-  "Bills",
-  "Grocery",
-  "Subscriptions",
-  "Transport",
-  "Shopping",
-  "Allowance",
-  "Other",
+export const CATEGORIES: CategoryDefinition[] = [
+  { type: "Expense", name: "Food", color: "steel-blue" },
+  { type: "Expense", name: "Groceries", color: "olive" },
+  { type: "Expense", name: "Transport", color: "teal-grey" },
+  { type: "Expense", name: "Bills and utilities", color: "navy" },
+  { type: "Expense", name: "Subscriptions", color: "forest" },
+  { type: "Expense", name: "Loans and debt", color: "umber" },
+  { type: "Expense", name: "Shopping", color: "deep-teal" },
+  { type: "Expense", name: "Health", color: "moss" },
+  { type: "Expense", name: "Education", color: "ink" },
+  { type: "Expense", name: "Entertainment", color: "mint" },
+  { type: "Expense", name: "Other", color: "grey" },
+  { type: "Income", name: "Salary", color: "forest" },
+  { type: "Income", name: "Allowance", color: "sage" },
+  { type: "Income", name: "Gifts", color: "olive" },
+  { type: "Income", name: "Refunds", color: "steel-blue" },
+  { type: "Income", name: "Other", color: "grey" },
 ];
 
-export const CATEGORY_COLORS: Record<Category, string> = {
-  Food: "var(--category-food-text)",
-  Bills: "var(--category-bills-text)",
-  Grocery: "var(--category-grocery-text)",
-  Subscriptions: "var(--category-subscriptions-text)",
-  Transport: "var(--category-transport-text)",
-  Shopping: "var(--category-shopping-text)",
-  Allowance: "var(--category-allowance-text)",
-  Other: "var(--category-other-text)",
+/** Every category name once, for filters that span both types. */
+export const CATEGORY_NAMES: Category[] = [
+  ...new Set(CATEGORIES.map((c) => c.name)),
+];
+
+export function categoriesFor(type: TxnType): Category[] {
+  return CATEGORIES.filter((c) => c.type === type).map((c) => c.name);
+}
+
+export function isCategoryFor(
+  type: TxnType,
+  category: unknown,
+): category is Category {
+  return CATEGORIES.some((c) => c.type === type && c.name === category);
+}
+
+// Interim badge and chart colours until the colour family tokens reach
+// index.css. Categories without a token of their own borrow the "other" one.
+const CATEGORY_TOKENS: Record<Category, string> = {
+  Food: "food",
+  Groceries: "grocery",
+  Transport: "transport",
+  "Bills and utilities": "bills",
+  Subscriptions: "subscriptions",
+  "Loans and debt": "other",
+  Shopping: "shopping",
+  Health: "other",
+  Education: "other",
+  Entertainment: "other",
+  Salary: "other",
+  Allowance: "allowance",
+  Gifts: "other",
+  Refunds: "other",
+  Other: "other",
 };
 
-export const CATEGORY_BADGE_BACKGROUNDS: Record<Category, string> = {
-  Food: "var(--category-food-bg)",
-  Bills: "var(--category-bills-bg)",
-  Grocery: "var(--category-grocery-bg)",
-  Subscriptions: "var(--category-subscriptions-bg)",
-  Transport: "var(--category-transport-bg)",
-  Shopping: "var(--category-shopping-bg)",
-  Allowance: "var(--category-allowance-bg)",
-  Other: "var(--category-other-bg)",
-};
+function tokenVars(part: "text" | "bg"): Record<Category, string> {
+  return Object.fromEntries(
+    CATEGORY_NAMES.map((name) => [
+      name,
+      `var(--category-${CATEGORY_TOKENS[name]}-${part})`,
+    ]),
+  ) as Record<Category, string>;
+}
+
+export const CATEGORY_COLORS = tokenVars("text");
+
+export const CATEGORY_BADGE_BACKGROUNDS = tokenVars("bg");

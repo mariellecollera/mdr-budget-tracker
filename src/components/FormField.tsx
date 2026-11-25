@@ -1,5 +1,6 @@
 import { useRef, type InputHTMLAttributes, type ReactNode } from "react";
 import { Calendar, ChevronDown } from "lucide-react";
+import type { DropdownOption } from "./Dropdown";
 
 export function FieldLabel({
   children,
@@ -99,7 +100,8 @@ interface SelectInputProps {
   id: string;
   value: string;
   onChange: (value: string) => void;
-  options: string[];
+  /** A plain string serves as both the value and the label. */
+  options: (string | DropdownOption)[];
   placeholder?: string;
   error?: string;
 }
@@ -131,11 +133,15 @@ export function SelectInput({
           <option value="" disabled>
             {placeholder || "Select…"}
           </option>
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
+          {options.map((opt) => {
+            const { value: optionValue, label } =
+              typeof opt === "string" ? { value: opt, label: opt } : opt;
+            return (
+              <option key={optionValue} value={optionValue}>
+                {label}
+              </option>
+            );
+          })}
         </select>
         <ChevronDown
           size={16}
