@@ -9,17 +9,25 @@ import Badge from "../../components/Badge";
 import {
   CATEGORY_BADGE_BACKGROUNDS,
   CATEGORY_COLORS,
+  categoriesFor,
 } from "../../lib/categories";
 import TypeToggle from "../../components/TypeToggle";
 import { FieldLabel, TextInput, SelectInput } from "../../components/FormField";
 import { useTransactions } from "../../context/TransactionsContext";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { CATEGORIES } from "../../lib/categories";
 import { formatCurrency, formatDisplayDate } from "../../lib/format";
+import {
+  PAYMENT_METHODS,
+  paymentMethodLabel,
+} from "../../lib/paymentMethods";
 import { useToast } from "../../context/ToastContext";
 import { TYPES } from "../../lib/typetoggle";
-import type { Category } from "../../types";
-import type { TransactionForm, TransactionFormErrors } from "./form";
+import type { Category, PaymentMethod } from "../../types";
+import {
+  withType,
+  type TransactionForm,
+  type TransactionFormErrors,
+} from "./form";
 
 export default function TransactionDetail() {
   const { id } = useParams();
@@ -47,6 +55,7 @@ export default function TransactionDetail() {
         type: transaction.type,
         category: transaction.category,
         amount: String(transaction.amount),
+        paymentMethod: transaction.paymentMethod,
       });
     }
   }, [transaction]);
@@ -104,6 +113,7 @@ export default function TransactionDetail() {
       type: form.type,
       category: form.category,
       amount: Number(form.amount),
+      paymentMethod: form.paymentMethod,
     });
     setIsEditing(false);
     showToast("Transaction updated successfully!");
@@ -184,7 +194,9 @@ export default function TransactionDetail() {
                 label="Type"
                 choices={TYPES}
                 value={form.type}
-                onChange={(v) => setField("type", v)}
+                onChange={(v) =>
+                  setForm((prev) => (prev ? withType(prev, v) : prev))
+                }
               />
             </div>
 
@@ -194,7 +206,7 @@ export default function TransactionDetail() {
                 id="category"
                 value={form.category}
                 onChange={(v) => setField("category", v as Category)}
-                options={CATEGORIES}
+                options={categoriesFor(form.type)}
                 error={errors.category}
               />
             </div>
@@ -208,6 +220,15 @@ export default function TransactionDetail() {
                 value={form.amount}
                 onChange={(v) => setField("amount", v)}
                 error={errors.amount}
+              />
+            </div>
+            <div>
+              <FieldLabel htmlFor="payment-method">Payment method</FieldLabel>
+              <SelectInput
+                id="payment-method"
+                value={form.paymentMethod}
+                onChange={(v) => setField("paymentMethod", v as PaymentMethod)}
+                options={PAYMENT_METHODS}
               />
             </div>
           </div>
@@ -294,6 +315,10 @@ export default function TransactionDetail() {
             <div>
               <FieldLabel>Amount</FieldLabel>
               {formatCurrency(transaction.amount)}
+            </div>
+            <div>
+              <FieldLabel>Payment method</FieldLabel>
+              {paymentMethodLabel(transaction.paymentMethod)}
             </div>
           </div>
 
