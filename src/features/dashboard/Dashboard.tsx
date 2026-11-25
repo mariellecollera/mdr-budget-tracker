@@ -10,7 +10,7 @@ import Button from "../../components/Button";
 import { ArrowRight } from "lucide-react";
 import TransactionCard from "../../components/TransactionCard";
 import { useTransactions } from "../../context/TransactionsContext";
-import { CATEGORIES } from "../../lib/categories";
+import { CATEGORY_NAMES } from "../../lib/categories";
 
 const TYPE_OPTIONS = [
   { value: "All", label: "All Types" },
@@ -20,7 +20,7 @@ const TYPE_OPTIONS = [
 
 const CATEGORY_OPTIONS = [
   { value: "All", label: "All Categories" },
-  ...CATEGORIES.map((c) => ({ value: c, label: c })),
+  ...CATEGORY_NAMES.map((c) => ({ value: c, label: c })),
 ];
 
 export default function Dashboard() {
