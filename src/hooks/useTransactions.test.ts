@@ -11,6 +11,7 @@ const lunch: TransactionInput = {
   type: "Expense",
   category: "Food",
   amount: 120,
+  paymentMethod: "gcash",
 };
 
 function seed(...ids: string[]) {
@@ -76,6 +77,26 @@ describe("useTransactions", () => {
 
     expect(result.current.getTransaction("a")).toBeUndefined();
     expect(stored()).toEqual([]);
+  });
+
+  it("upgrades old saved data and writes it back", () => {
+    const old = {
+      id: "a",
+      name: "Water",
+      date: "2026-11-25",
+      type: "Expense",
+      category: "Bills",
+      amount: 300,
+    };
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify([old]));
+
+    const { result } = renderHook(() => useTransactions());
+
+    const upgraded = [
+      { ...old, category: "Bills and utilities", paymentMethod: "cash" },
+    ];
+    expect(result.current.transactions).toEqual(upgraded);
+    expect(stored()).toEqual(upgraded);
   });
 
   it.each(["not json", '{"id":"a"}'])(
