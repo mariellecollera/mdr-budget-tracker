@@ -24,16 +24,19 @@ export default function ThemeToggle() {
         <Sun
           size={12}
           aria-hidden="true"
-          className="pointer-events-none absolute left-1.5 text-white"
+          className="pointer-events-none absolute left-1.5"
+          style={{ color: "var(--color-btn-primary-text)" }}
         />
         <Moon
           size={12}
           aria-hidden="true"
-          className="pointer-events-none absolute right-1.5 text-white"
+          className="pointer-events-none absolute right-1.5"
+          style={{ color: "var(--color-btn-primary-text)" }}
         />
         <span
-          className="relative z-10 inline-block h-4.5 w-4.5 transform rounded-full bg-white transition-transform"
+          className="relative z-10 inline-block h-4.5 w-4.5 transform rounded-full transition-transform"
           style={{
+            backgroundColor: "var(--color-btn-primary-text)",
             transform: isDark ? "translateX(22px)" : "translateX(4px)",
             width: "18px",
             height: "18px",
