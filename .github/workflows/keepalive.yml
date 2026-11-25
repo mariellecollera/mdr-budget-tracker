@@ -1,0 +1,28 @@
+# Free Supabase projects pause when the database sees too little activity over
+# a week. Supabase says a few requests each day are typically enough.
+name: Keep Supabase awake
+
+on:
+  schedule:
+    - cron: "0 3 * * *" # daily at 03:00 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          for attempt in 1 2 3; do
+            curl -fsS --retry 3 --max-time 30 \
+              "$SUPABASE_URL/rest/v1/categories?select=id&limit=1" \
+              -H "apikey: $SUPABASE_ANON_KEY"
+            echo
+            sleep 5
+          done
