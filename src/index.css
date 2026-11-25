@@ -37,6 +37,8 @@
   --color-tab-inactive-text: #0e2247;
   --color-tab-active-bg: #0e2247;
   --color-tab-active-text: #ffffff;
+  --color-bg-panel: var(--color-tab-active-bg);
+  --color-logo: #012c57;
 
   --color-btn-primary-bg: #0e2247;
   --color-btn-primary-text: #ffffff;
@@ -110,10 +112,10 @@
   --color-modal-bg: #eaf4f1;
 
   --shadow-card: 0 1px 2px rgba(15, 42, 87, 0.06);
-  --shadow-tab-inactive: inset 0 -4px 6px -4px rgba(15, 42, 87, 0.95);
-  --shadow-tab-active:
-    2px 0 6px -4px rgba(15, 42, 87, 0.95),
-    -2px 0 6px -4px rgba(15, 42, 87, 0.95);
+  --shadow-tab-inactive:
+    inset 0 1px 4px rgba(14, 34, 71, 0.05),
+    inset 0 -2px 4px rgba(14, 34, 71, 0.2);
+  --shadow-panel: 0 3px 4px rgba(0, 0, 0, 0.25);
 }
 
 [data-theme="dark"] {
@@ -139,6 +141,7 @@
   --color-tab-inactive-text: #2a3562;
   --color-tab-active-bg: var(--color-cobalt-600);
   --color-tab-active-text: #ffffff;
+  --color-logo: #ffffff;
 
   --color-btn-primary-bg: #c9d6ec;
   --color-btn-primary-text: #0e2247;
@@ -221,6 +224,13 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-btn-primary-bg);
   outline-offset: 2px;
+}
+
+/* Navigation sits on navy or cobalt, so its ring follows the label color
+   and stays inside the item. */
+.nav-focus:focus-visible {
+  outline-color: currentColor;
+  outline-offset: -4px;
 }
 
 @keyframes toast-in {

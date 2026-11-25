@@ -14,15 +14,15 @@ export default function Layout({
   return (
     <div
       ref={clickOutsideRef}
-      className="px-4 py-6 md:p-8"
+      className="rounded-tr-[32px] rounded-b-2xl px-3 py-5 md:p-8"
       style={{
-        backgroundColor: "var(--color-tab-active-bg)",
-        borderRadius: "0 2rem 1rem 1rem",
+        backgroundColor: "var(--color-bg-panel)",
+        boxShadow: "var(--shadow-panel)",
       }}
     >
       {variant === "panel" ? (
         <div
-          className="p-4 sm:p-8"
+          className="p-4 md:p-8"
           style={{
             backgroundColor: "var(--color-bg-card)",
             boxShadow: "var(--shadow-card)",
