@@ -1,0 +1,72 @@
+import { memo } from "react";
+import { Link } from "react-router-dom";
+import Badge from "./Badge";
+import type { Transaction } from "../types";
+import { formatCurrency, formatDisplayDate } from "../lib/format";
+import {
+  CATEGORY_BADGE_BACKGROUNDS,
+  CATEGORY_COLORS,
+} from "../lib/categories";
+
+/**
+ * Performance note: Dashboard re-renders on every keystroke in the search
+ * box and on every filter change. Without memoization, all N transaction
+ * cards would re-render each time even though their own data hasn't
+ * changed. Wrapping this in React.memo means a card only re-renders when
+ * its own `transaction` prop actually changes (e.g. after an edit),
+ * regardless of how many times the parent Dashboard re-renders.
+ */
+function TransactionCard({ transaction }: { transaction: Transaction }) {
+  const isExpense = transaction.type === "Expense";
+
+  return (
+    <Link
+      to={`/transaction/${transaction.id}`}
+      className="flex items-center justify-between rounded-2xl px-5 py-4 transition-transform hover:-translate-y-0.5"
+      style={{
+        border: "1.5px solid var(--color-border)",
+        backgroundColor: "var(--color-transaction-card-bg)",
+      }}
+    >
+      <div className="min-w-0">
+        <p
+          className="truncate font-display text-sm font-bold"
+          style={{ color: "var(--color-text-primary)" }}
+        >
+          {transaction.name}
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <span
+            className="text-xs"
+            style={{ color: "var(--color-text-secondary)" }}
+          >
+            {formatDisplayDate(transaction.date)}
+          </span>
+          <Badge
+            color={CATEGORY_COLORS[transaction.category]}
+            backgroundColor={CATEGORY_BADGE_BACKGROUNDS[transaction.category]}
+          >
+            {transaction.category}
+          </Badge>
+        </div>
+      </div>
+
+      <div
+        className="ml-4 shrink-0 rounded-lg px-4 py-2 text-right text-sm sm:text-base font-bold"
+        style={{
+          backgroundColor: isExpense
+            ? "var(--color-expense-bg)"
+            : "var(--color-income-bg)",
+          color: isExpense
+            ? "var(--color-expense-text)"
+            : "var(--color-income-text)",
+        }}
+      >
+        {isExpense ? "-" : "+"}
+        {formatCurrency(transaction.amount)}
+      </div>
+    </Link>
+  );
+}
+
+export default memo(TransactionCard);
