@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { normalizeTransactions } from "../lib/transactions";
 import type { Transaction, TransactionInput } from "../types";
 
 const STORAGE_KEY = "lumon-transactions";
@@ -8,7 +9,7 @@ function readFromStorage(): Transaction[] {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? normalizeTransactions(parsed) : [];
   } catch {
     return [];
   }
