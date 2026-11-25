@@ -7,12 +7,20 @@ import TypeToggle from "../../components/TypeToggle";
 import { FieldLabel, TextInput, SelectInput } from "../../components/FormField";
 import { useTransactions } from "../../context/TransactionsContext";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { CATEGORIES } from "../../lib/categories";
+import { categoriesFor } from "../../lib/categories";
 import { todayISO } from "../../lib/format";
+import {
+  DEFAULT_PAYMENT_METHOD,
+  PAYMENT_METHODS,
+} from "../../lib/paymentMethods";
 import { useToast } from "../../context/ToastContext";
 import { TYPES } from "../../lib/typetoggle";
-import type { Category } from "../../types";
-import type { TransactionForm, TransactionFormErrors } from "./form";
+import type { Category, PaymentMethod } from "../../types";
+import {
+  withType,
+  type TransactionForm,
+  type TransactionFormErrors,
+} from "./form";
 
 const EMPTY_FORM: TransactionForm = {
   name: "",
@@ -20,6 +28,7 @@ const EMPTY_FORM: TransactionForm = {
   type: "Expense",
   category: "",
   amount: "",
+  paymentMethod: DEFAULT_PAYMENT_METHOD,
 };
 
 export default function AddTransaction() {
@@ -61,6 +70,7 @@ export default function AddTransaction() {
       type: form.type,
       category: form.category,
       amount: Number(form.amount),
+      paymentMethod: form.paymentMethod,
     });
     showToast("Transaction added successfully!");
     navigate("/");
@@ -126,7 +136,7 @@ export default function AddTransaction() {
               label="Type"
               choices={TYPES}
               value={form.type}
-              onChange={(v) => setField("type", v)}
+              onChange={(v) => setForm((prev) => withType(prev, v))}
             />
           </div>
 
@@ -136,7 +146,7 @@ export default function AddTransaction() {
               id="category"
               value={form.category}
               onChange={(v) => setField("category", v as Category)}
-              options={CATEGORIES}
+              options={categoriesFor(form.type)}
               placeholder="Select a category"
               error={errors.category}
             />
@@ -152,6 +162,15 @@ export default function AddTransaction() {
               onChange={(v) => setField("amount", v)}
               placeholder="0.00"
               error={errors.amount}
+            />
+          </div>
+          <div>
+            <FieldLabel htmlFor="payment-method">Payment method</FieldLabel>
+            <SelectInput
+              id="payment-method"
+              value={form.paymentMethod}
+              onChange={(v) => setField("paymentMethod", v as PaymentMethod)}
+              options={PAYMENT_METHODS}
             />
           </div>
         </div>
